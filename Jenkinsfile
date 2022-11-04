@@ -33,7 +33,7 @@ sshPublisher(publishers: [sshPublisherDesc(configName: 'TargetDockerServer', tra
 		steps {
 			sshPublisher(publishers: [sshPublisherDesc(configName: 'TargetDockerServer', 
 			transfers: [sshTransfer(cleanRemote: false, excludes: '', 
-			execCommand: 'docker run --name DeployedVATCalc -d -p 80:80 victorialloyd/vatcalc', 
+			execCommand: 'docker run --name DeployedVATCalc -d -p 80:80 victorialloyd/vatcalc:latest', 
                         execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, 
                         patternSeparator: '[, ]+', remoteDirectory: '', 
 			remoteDirectorySDF: false, removePrefix: '', 
