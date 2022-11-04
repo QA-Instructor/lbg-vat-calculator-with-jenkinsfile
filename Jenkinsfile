@@ -35,11 +35,22 @@ pipeline{
 			useWorkspaceInPromotion: false, verbose: false)])
 			}
 	   }
-            stage ("Deploy to target GCP Instance"){
+	  stage ("Pull latest image"){
 		steps {
 			sshPublisher(publishers: [sshPublisherDesc(configName: 'TargetDockerServer', 
 			transfers: [sshTransfer(cleanRemote: false, excludes: '', 
-			execCommand: 'docker run --name DeployedVATCalc -d -p 80:80 "${registry}":"${env.BUILD_NUMBER}"', 
+			execCommand: 'docker pull victorialloyd/vatcalc:latest', 
+			execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, 
+			patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, 
+			removePrefix: '', sourceFiles: '')], usePromotionTimestamp: false, 
+			useWorkspaceInPromotion: false, verbose: false)])
+			}
+	  }     
+          stage ("Deploy to target GCP Instance"){
+		steps {
+			sshPublisher(publishers: [sshPublisherDesc(configName: 'TargetDockerServer', 
+			transfers: [sshTransfer(cleanRemote: false, excludes: '', 
+			execCommand: 'docker run --name DeployedVATCalc -d -p 80:80 victorialloyd/vatcalc:latest', 
                         execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, 
                         patternSeparator: '[, ]+', remoteDirectory: '', 
 			remoteDirectorySDF: false, removePrefix: '', 
