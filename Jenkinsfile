@@ -24,7 +24,11 @@ pipeline{
                     }
                 }
             }
-
+	   stage ("Stop Container if running"){
+		steps {
+sshPublisher(publishers: [sshPublisherDesc(configName: 'TargetDockerServer', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'docker stop DeployedVATCalc && docker rm DeployedVATCalc || true', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+			}
+	   }
             stage ("Deploy to target GCP Instance"){
 		steps {
 			sshPublisher(publishers: [sshPublisherDesc(configName: 'TargetDockerServer', 
