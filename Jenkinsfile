@@ -25,6 +25,18 @@ pipeline{
                 }
             }
 
+            stage ("Deploy to target GCP Instance"){
+		steps {
+			sshPublisher(publishers: [sshPublisherDesc(configName: 'TargetDockerServer', 
+			transfers: [sshTransfer(cleanRemote: false, excludes: '', 
+			execCommand: 'docker run --name DeployedVATCalc -d -p 80:80 ${registry}', 
+                        execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, 
+                        patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', 
+ 			sourceFiles: '')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, 
+			verbose: false)])			
+		}
+	    }
+
             stage ("Clean up"){
                 steps {
                     script {
